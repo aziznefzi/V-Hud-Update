@@ -37,7 +37,7 @@ jobs:
         working-directory: plugin-sdk
         shell: cmd
         run: |
-          call "tools\generate\Visual Studio.bat"
+          call "tools\generate\Visual Studio 2019.bat"
           msbuild plugin.sln /p:Configuration=Release /p:Platform="Mixed Platforms" /target:plugin_sa /m
 
       - name: Generate V-Hud Project Files
