@@ -2,7 +2,7 @@
 #include "D3DSprite.h"
 
 CD3DSprite::CD3DSprite() {
-    D3DXCreateSprite(GetD3DDevice(), &m_pSprite);
+    D3DXCreateSprite((LPDIRECT3DDEVICE9)GetD3DDevice(), &m_pSprite);
 }
 
 CD3DSprite::~CD3DSprite() {

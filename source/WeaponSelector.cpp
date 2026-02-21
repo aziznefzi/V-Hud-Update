@@ -128,7 +128,7 @@ void CWeaponSelector::Clear() {
     bSlowCycle = false;
     nTimeSinceClosed = CTimer::m_snTimeInMilliseconds;
 
-    nPrevCamHor = TheCamera.m_fMouseAccelHorzntl;
+    nPrevCamHor = TheCamera.m_fMouseAccelHorzntal;
     nPrevCamVer = TheCamera.m_fMouseAccelVertical;
 
     CTimer::ms_fTimeScale = 1.0f;
@@ -276,11 +276,11 @@ bool CWeaponSelector::IsAbleToSwitchWeapon() {
         playa
         && !playa->bInVehicle
         && !playa->bDontRender
-        && playa->m_nPedState != PEDSTATE_MAKE_PHONECALL
-        && playa->m_nPedState != PEDSTATE_ANSWER_MOBILE
-        && playa->m_nPedState != PEDSTATE_PAUSE
+        && playa->m_ePedState != PEDSTATE_MAKE_PHONECALL
+        && playa->m_ePedState != PEDSTATE_ANSWER_MOBILE
+        && playa->m_ePedState != PEDSTATE_PAUSE
         && playa->IsPedShootable()
-        && playa->m_nPedState != PEDSTATE_FACE_PHONE
+        && playa->m_ePedState != PEDSTATE_FACE_PHONE
         && !playa->bIsInTheAir
         && !playa->bFiringWeapon
         && !playa->bIsAimingGun
@@ -288,7 +288,7 @@ bool CWeaponSelector::IsAbleToSwitchWeapon() {
         && !playa->m_pPlayerData->m_bHaveTargetSelected
         && !CDarkel::FrenzyOnGoing()
         && !playa->m_pAttachedTo
-        && !playa->m_nPhysicalFlags.bAttachedToEntity
+        && !playa->bAttachedToEntity
         && !playa->m_pIntelligence->GetTaskJetPack()
         && !playa->m_pIntelligence->GetTaskClimb()
         && !playa->m_pIntelligence->GetTaskInAir()
@@ -480,17 +480,17 @@ CVector2D CWeaponSelector::LimitMousePosition(CVector2D& pos) {
 }
 
 void CWeaponSelector::ResetCameraMovement() {
-    TheCamera.m_fMouseAccelHorzntl = nPrevCamHor;
+    TheCamera.m_fMouseAccelHorzntal = nPrevCamHor;
     TheCamera.m_fMouseAccelVertical = nPrevCamVer;
     nPrevCamHor = 0.0f;
     nPrevCamVer = 0.0f;
 }
 
 void CWeaponSelector::DisableCameraMovement() {
-    nPrevCamHor = TheCamera.m_fMouseAccelHorzntl;
+    nPrevCamHor = TheCamera.m_fMouseAccelHorzntal;
     nPrevCamVer = TheCamera.m_fMouseAccelVertical;
 
-    TheCamera.m_fMouseAccelHorzntl = 0.0f;
+    TheCamera.m_fMouseAccelHorzntal = 0.0f;
     TheCamera.m_fMouseAccelVertical = 0.0f;
 }
 
@@ -580,7 +580,7 @@ void CWeaponSelector::PopulateSlot(int slot) {
                 nArrayOfAvailableWeapons[slot][j] = j;
                 nNumWeaponsAvailableInSlot[slot]++;
 
-                if (playa->m_aWeapons[playa->m_nActiveWeaponSlot].m_eWeaponType == (eWeaponType)w->id) {
+                if (playa->m_aWeapons[playa->m_nSelectedWepSlot].m_eWeaponType == (eWeaponType)w->id) {
                     nSelectedSlot = slot;
                     nSelectedWeapon[slot] = j;
 
@@ -678,8 +678,8 @@ void CWeaponSelector::CloseWeaponWheel(bool switchon) {
         if (nSelectedWeapon[nSelectedSlot] != -1 && weap != -1) {
             playa->m_pPlayerData->m_nChosenWeapon = playa->GetWeaponSlot((eWeaponType)w->id);
 
-            if (playa->m_pPlayerData->m_nChosenWeapon != playa->m_nActiveWeaponSlot) {
-                playa->RemoveWeaponAnims(playa->m_nActiveWeaponSlot, -1000.0f);
+            if (playa->m_pPlayerData->m_nChosenWeapon != playa->m_nSelectedWepSlot) {
+                playa->RemoveWeaponAnims(playa->m_nSelectedWepSlot, -1000.0f);
                 playa->MakeChangesForNewWeapon(playa->m_aWeapons[playa->m_pPlayerData->m_nChosenWeapon].m_eWeaponType);
                 nActiveSlot = nSelectedSlot;
                 nActiveWeapon[nSelectedSlot] = nSelectedWeapon[nSelectedSlot];
@@ -875,7 +875,7 @@ void CWeaponSelector::DrawWheel() {
 
                 int slot = playa->GetWeaponSlot((eWeaponType)wep->id);
                 int weaponType = playa->m_aWeapons[slot].m_eWeaponType;
-                int totalAmmo = playa->m_aWeapons[slot].m_nTotalAmmo;
+                int totalAmmo = playa->m_aWeapons[slot].m_nAmmoTotal;
                 int ammoInClip = playa->m_aWeapons[slot].m_nAmmoInClip;
                 int maxAmmoInClip = CWeaponInfo::GetWeaponInfo(playa->m_aWeapons[slot].m_eWeaponType, playa->GetWeaponSkill((eWeaponType)wep->id))->m_nAmmoClip;
                 int ammo, clip;
@@ -993,7 +993,7 @@ void CWeaponSelector::DrawWheel() {
                 offset += 30.0f;
             }
             int slot = playa->GetWeaponSlot((eWeaponType)selected_wep->id);
-            int ammo = playa->m_aWeapons[slot].m_nTotalAmmo - playa->m_aWeapons[slot].m_nAmmoInClip;
+            int ammo = playa->m_aWeapons[slot].m_nAmmoTotal - playa->m_aWeapons[slot].m_nAmmoInClip;
             if (ammo > 9999) {
                 CFontNew::SetScale(SCREEN_MULTIPLIER(0.58f), SCREEN_MULTIPLIER(1.28f));
                 CFontNew::PrintString(SCREEN_COORD_CENTER_X + SCREEN_COORD(x + 2.0f), SCREEN_COORD_CENTER_Y + SCREEN_COORD(y - 47.0f + offset), TextNew.GetText("UNLIMIT").text);
@@ -1006,7 +1006,7 @@ void CWeaponSelector::DrawWheel() {
 }
 
 int CWeaponSelector::FadeIn(int a) {
-    return min(nWeaponExtraFadeAlpha, a);
+    return std::min(nWeaponExtraFadeAlpha, a);
 }
 
 float CWeaponSelector::GetShiftOffsetForStatsBox() {
@@ -1169,4 +1169,5 @@ CWeaponStat::CWeaponStat() {
 CWeaponCrosshair::CWeaponCrosshair() {
     strcpy(name, "");
 }
+
 

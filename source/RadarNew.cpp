@@ -398,7 +398,7 @@ unsigned int CRadarNew::GetRadarTraceColour(unsigned int c, bool bright, bool fr
 }
 
 int*& CRadarNew::GetRadarTexturesSlot() {
-    return gRadarTextures;
+    return gRadarTxdIds;
 }
 
 tRadarTrace*& CRadarNew::GetRadarTrace() {
@@ -1261,7 +1261,7 @@ void CRadarNew::DrawRadarRectangle() {
         // Breath bar
         col = GET_SETTING(HUD_BREATH_BAR).col;
         if (CHud::m_ItemToFlash != 10 || CTimer::m_FrameCounter & 8) {
-            if (playa.m_pPed->m_nPhysicalFlags.bSubmergedInWater) {
+            if (playa.m_pPed->bSubmergedInWater) {
                 progress = playa.m_pPed->m_pPlayerData->m_fBreath / CStats::GetFatAndMuscleModifier(STAT_MOD_AIR_IN_LUNG);
                 DrawProgressBar(HUD_X(GET_SETTING(HUD_BREATH_BAR).x), HUD_BOTTOM(GET_SETTING(HUD_BREATH_BAR).y), SCREEN_COORD(GET_SETTING(HUD_BREATH_BAR).w), SCREEN_COORD(GET_SETTING(HUD_BREATH_BAR).h), progress,
                     col);
@@ -1323,7 +1323,7 @@ void CRadarNew::DrawRadarRectangle() {
             // Breath bar
             col = GET_SETTING(HUD_BREATH_BAR_P2).col;
             if (CHud::m_ItemToFlash != 10 || CTimer::m_FrameCounter & 8) {
-                if (playa2.m_pPed->m_nPhysicalFlags.bSubmergedInWater) {
+                if (playa2.m_pPed->bSubmergedInWater) {
                     progress = playa2.m_pPed->m_pPlayerData->m_fBreath / CStats::GetFatAndMuscleModifier(STAT_MOD_AIR_IN_LUNG);
                     DrawProgressBar(HUD_X(GET_SETTING(HUD_BREATH_BAR_P2).x), HUD_BOTTOM(GET_SETTING(HUD_BREATH_BAR_P2).y), SCREEN_COORD(GET_SETTING(HUD_BREATH_BAR_P2).w), SCREEN_COORD(GET_SETTING(HUD_BREATH_BAR_P2).h), progress,
                         col);
@@ -1667,7 +1667,7 @@ void CRadarNew::DrawGangOverlay(bool force) {
 void CRadarNew::DrawRadarMap(int x, int y) {
     CPed* playa = FindPlayerPed(-1);
 
-    RwCameraEndUpdate(Scene.m_pRwCamera);
+    RwCameraEndUpdate(Scene.m_pCamera);
 
     RwRenderStateSet(rwRENDERSTATEZTESTENABLE, reinterpret_cast<void*>(FALSE));
     RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, reinterpret_cast<void*>(FALSE));
@@ -1812,7 +1812,7 @@ void CRadarNew::DrawRadarMap(int x, int y) {
 
     RwCameraEndUpdate(m_pCamera);
 
-    RwCameraBeginUpdate(Scene.m_pRwCamera);
+    RwCameraBeginUpdate(Scene.m_pCamera);
 
     RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void*>(TRUE));
 
@@ -2000,5 +2000,7 @@ bool CRadarNew::IsPlayerInVehicle() {
 bool CRadarNew::Is3dRadar() {
     return m_b3dRadar;
 }
+
+
 
 

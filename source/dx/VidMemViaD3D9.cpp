@@ -29,7 +29,7 @@
 HRESULT GetVideoMemoryViaD3D9(HMONITOR hMonitor, UINT* pdwAvailableTextureMem) {
     *pdwAvailableTextureMem = 0;
 
-    if (IDirect3DDevice9* pd3dDevice = GetD3DDevice()) {
+    if (IDirect3DDevice9* pd3dDevice = (IDirect3DDevice9*)GetD3DDevice()) {
         *pdwAvailableTextureMem = pd3dDevice->GetAvailableTextureMem();
         return S_OK;
     }
