@@ -440,26 +440,26 @@ void CHudNew::Draw() {
             || m_bShowWastedBusted
             || CMenuPanels::bActive
             || MenuNew.bMenuActive
-            || playa->m_nPedFlags.bFallenDown
-            || playa->m_nPedFlags.bIsTalking
-            || playa->m_nPedFlags.bIsInTheAir
+            || playa->bFallenDown
+            || playa->bIsTalking
+            || playa->bIsInTheAir
             || (playa->m_pIntelligence && playa->m_pIntelligence->GetUsingParachute())
             || (playa->m_pIntelligence && playa->m_pIntelligence->GetTaskUseGun())
-            || playa->m_nPedState == PEDSTATE_ON_FIRE
-            || playa->m_nPedState == PEDSTATE_FALL
-            || playa->m_nPedState == PEDSTATE_GETUP
-            || playa->m_nPedState == PEDSTATE_ARREST_PLAYER
-            || playa->m_nPedState == PEDSTATE_DIE
-            || playa->m_nPedState == PEDSTATE_DEAD
-            || playa->m_nPedState == PEDSTATE_CARJACK
-            || playa->m_nPedState == PEDSTATE_DRAGGED_FROM_CAR
-            || playa->m_nPedState == PEDSTATE_ENTER_CAR
-            || playa->m_nPedState == PEDSTATE_EXIT_CAR
-            || playa->m_nPedState == PEDSTATE_STEAL_CAR
-            || playa->m_nPedState == PEDSTATE_AIMGUN
-            || playa->m_nPedState == PEDSTATE_FIGHT
-            || playa->m_nPedState == PEDSTATE_ROCKETLAUNCHER_MODE
-            || playa->m_nPedState == PEDSTATE_SNIPER_MODE
+            || playa->m_ePedState == PEDSTATE_ON_FIRE
+            || playa->m_ePedState == PEDSTATE_FALL
+            || playa->m_ePedState == PEDSTATE_GETUP
+            || playa->m_ePedState == PEDSTATE_ARREST_PLAYER
+            || playa->m_ePedState == PEDSTATE_DIE
+            || playa->m_ePedState == PEDSTATE_DEAD
+            || playa->m_ePedState == PEDSTATE_CARJACK
+            || playa->m_ePedState == PEDSTATE_DRAGGED_FROM_CAR
+            || playa->m_ePedState == PEDSTATE_ENTER_CAR
+            || playa->m_ePedState == PEDSTATE_EXIT_CAR
+            || playa->m_ePedState == PEDSTATE_STEAL_CAR
+            || playa->m_ePedState == PEDSTATE_AIMGUN
+            || playa->m_ePedState == PEDSTATE_FIGHT
+            || playa->m_ePedState == PEDSTATE_ROCKETLAUNCHER_MODE
+            || playa->m_ePedState == PEDSTATE_SNIPER_MODE
             || IsAimingWeapon()
             || CEntryExitManager::ms_exitEnterState > 0) {
             CellPhone.bRequestPhoneClose = true;
@@ -484,7 +484,7 @@ bool CHudNew::IsAimingWeapon() {
         || mode == MODE_SNIPER_RUNABOUT
         || mode == MODE_CAMERA
         || mode == MODE_SYPHON
-        || (mode == MODE_1STPERSON && !FindPlayerPed(0)->m_nPedFlags.bInVehicle)
+        || (mode == MODE_1STPERSON && !FindPlayerPed(0)->bInVehicle)
         || mode == MODE_AIMWEAPON_FROMCAR
         || mode == MODE_AIMWEAPON_ATTACHED
         || mode == MODE_TWOPLAYER_IN_CAR_AND_SHOOTING;
@@ -502,7 +502,7 @@ bool CHudNew::IsFirstPersonAiming() {
 void CHudNew::DrawCrosshairs() {
     float x = SCREEN_WIDTH * CCamera::m_f3rdPersonCHairMultX;
     float y = SCREEN_HEIGHT * CCamera::m_f3rdPersonCHairMultY;
-    int modelId = CWeaponInfo::GetWeaponInfo(CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_aWeapons[CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_nSelectedWepSlot].m_eWeaponType, 1)->m_nModelId1;
+    int modelId = CWeaponInfo::GetWeaponInfo(CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_aWeapons[CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_nSelectedWepSlot].m_eWeaponType, 1)->m_nModelId;
     float radius = CWorld::Players[CWorld::PlayerInFocus].m_pPed->GetWeaponRadiusOnScreen() * 2.0f;
     bool reloading = CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_aWeapons[CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_nSelectedWepSlot].m_nState == WEAPONSTATE_RELOADING;
 
@@ -547,7 +547,7 @@ void CHudNew::DrawCrosshairs() {
     if (playa) {
         bool ik = playa->m_pIntelligence && playa->m_pIntelligence->GetTaskUseGun() && playa->m_pIntelligence->GetTaskUseGun()->m_pWeaponInfo->m_nFlags.bAimWithArm && !playa->m_pIntelligence->GetTaskUseGun()->m_ArmIKInUse;
 
-        if (ik && !playa->m_nPedFlags.bIsDucking && !playa->m_nPedFlags.bInVehicle)
+        if (ik && !playa->bIsDucking && !playa->bInVehicle)
             return;
 
         static bool haveTargetSelected = false;
@@ -827,7 +827,7 @@ void CHudNew::DrawAmmo() {
         strcpy(str_clip, "");
     }
     else {
-        if (weaponType == WEAPON_FTHROWER) {
+        if (weaponType == WEAPONTYPE_FTHROWER) {
             unsigned int total = 9999;
             if ((totalAmmo - ammoInClip) / 10 <= 9999)
                 total = (totalAmmo - ammoInClip) / 10;
@@ -876,9 +876,9 @@ void CHudNew::DrawAmmo() {
 
     if (CDarkel::FrenzyOnGoing()
         || weaponType == WEAPONTYPE_UNARMED
-        || weaponType == WEAPON_DETONATOR
-        || weaponType >= WEAPON_DILDO1 && weaponType < WEAPON_GRENADE
-        || weaponType == WEAPON_PARACHUTE
+        || weaponType == WEAPONTYPE_DETONATOR
+        || weaponType >= WEAPONTYPE_DILDO1 && weaponType < WEAPONTYPE_GRENADE
+        || weaponType == WEAPONTYPE_PARACHUTE
         || CWeaponInfo::GetWeaponInfo((eWeaponType)weaponType, 1)->m_nWeaponFire == 5
         || CWeaponInfo::GetWeaponInfo((eWeaponType)weaponType, 1)->m_nSlot <= 1) {
         nTimeToShowAmmoDifference = 0;
@@ -1141,11 +1141,11 @@ void CHudNew::DrawStats() {
         CFontNew::SetScale(SCREEN_MULTIPLIER(0.52f), SCREEN_MULTIPLIER(1.24f));
 
         int wepType = playa->m_aWeapons[playa->m_nSelectedWepSlot].m_eWeaponType;
-        if (wepType == WEAPON_TEC9) {
-            wepType = WEAPON_MICRO_UZI;
+        if (wepType == WEAPONTYPE_TEC9) {
+            wepType = WEAPONTYPE_MICRO_UZI;
         }
 
-        int wep_stat_id = wepType < WEAPON_PISTOL || wepType > WEAPON_TEC9 ? -1 : wepType <= WEAPON_M4 ? wepType - WEAPON_PISTOL + STAT_PISTOL_SKILL : STAT_MACHINE_PISTOL_SKILL;
+        int wep_stat_id = wepType < WEAPONTYPE_PISTOL || wepType > WEAPONTYPE_TEC9 ? -1 : wepType <= WEAPONTYPE_M4 ? wepType - WEAPONTYPE_PISTOL + STAT_PISTOL_SKILL : STAT_MACHINE_PISTOL_SKILL;
 
         unsigned short stat[] = {
             64,
@@ -1387,8 +1387,8 @@ void CHudNew::DrawMissionTimers() {
             CFontNew::SetScale(SCREEN_MULTIPLIER(0.6f), SCREEN_MULTIPLIER(1.2f));
 
             if (CUserDisplay::OnscnTimer.m_Clock.m_bEnabled) {
-                MissionTimersString[nTimersCount][0] = CUserDisplay::OnscnTimer.m_Clock.m_szDisplayedText;
-                MissionTimersString[nTimersCount][1] = TheText.Get(CUserDisplay::OnscnTimer.m_Clock.m_szDescriptionTextKey);
+                MissionTimersString[nTimersCount][0] = (char*)CUserDisplay::OnscnTimer.m_Clock.m_szDisplayedText;
+                MissionTimersString[nTimersCount][1] = (char*)TheText.Get(CUserDisplay::OnscnTimer.m_Clock.m_szDescriptionTextKey);
                 barChart[nTimersCount] = false;
                 nTimersCount++;
             }
@@ -1402,8 +1402,8 @@ void CHudNew::DrawMissionTimers() {
                 else
                     barChart[nTimersCount] = false;
 
-                MissionTimersString[nTimersCount][0] = CUserDisplay::OnscnTimer.m_aCounters[i].m_szDisplayedText;
-                MissionTimersString[nTimersCount][1] = TheText.Get(CUserDisplay::OnscnTimer.m_aCounters[i].m_szDescriptionTextKey);
+                MissionTimersString[nTimersCount][0] = (char*)CUserDisplay::OnscnTimer.m_aCounters[i].m_szDisplayedText;
+                MissionTimersString[nTimersCount][1] = (char*)TheText.Get(CUserDisplay::OnscnTimer.m_aCounters[i].m_szDescriptionTextKey);
                 nTimersCount++;
             }
 
@@ -1853,7 +1853,7 @@ void CHudNew::DrawSuccessFailedMessage() {
         else if (CHud::m_BigMessage[0][0] && !strcmp(CHud::m_BigMessage[0], TheText.Get("M_FAIL"))) {
             strcpy(m_SuccessFailedText[0], TextNew.GetText("M_FAIL").text);
 
-            switch (FindPlayerPed(0)->m_nPedState) {
+            switch (FindPlayerPed(0)->m_ePedState) {
             case PEDSTATE_DEAD:
                 strcpy(m_SuccessFailedText[1], TextNew.GetText("WASTED").text);
                 break;
@@ -2101,7 +2101,7 @@ void CHudNew::DrawWastedBustedText() {
     char* str = NULL;
     static eHudSettings i;
 
-    switch (FindPlayerPed(-1)->m_nPedState) {
+    switch (FindPlayerPed(-1)->m_ePedState) {
         case PEDSTATE_DEAD:
         case PEDSTATE_DIE:
             str = TextNew.GetText("WASTED").text;
@@ -2239,3 +2239,5 @@ void CHudNew::TakePhotograph() {
         }
     }
 }
+
+

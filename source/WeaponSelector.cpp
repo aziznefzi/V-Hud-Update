@@ -174,7 +174,7 @@ void CWeaponSelector::Shutdown() {
 }
 
 void CWeaponSelector::ReadSlotFromFile() {
-    std::ifstream file(PLUGIN_PATH("VHud\\data\\weapon_selector.dat"));
+    std::ifstream file(PLUGIN_PATH("VHud\\data\\WEAPONTYPE_selector.dat"));
 
     int slot = 0;
     if (file.is_open()) {
@@ -231,7 +231,7 @@ void CWeaponSelector::ReadSlotFromFile() {
 }
 
 void CWeaponSelector::ReadWeaponRatesFromFile() {
-    std::ifstream file(PLUGIN_PATH("VHud\\data\\weapon_rates.dat"));
+    std::ifstream file(PLUGIN_PATH("VHud\\data\\WEAPONTYPE_rates.dat"));
 
     int id = 0;
     if (file.is_open()) {
@@ -274,16 +274,16 @@ bool CWeaponSelector::IsAbleToSwitchWeapon() {
 
     return
         playa
-        && !playa->m_nPedFlags.bInVehicle
-        && !playa->m_nPedFlags.bDontRender
+        && !playa->bInVehicle
+        && !playa->bDontRender
         && playa->m_nPedState != PEDSTATE_MAKE_PHONECALL
         && playa->m_nPedState != PEDSTATE_ANSWER_MOBILE
         && playa->m_nPedState != PEDSTATE_PAUSE
         && playa->IsPedShootable()
         && playa->m_nPedState != PEDSTATE_FACE_PHONE
-        && !playa->m_nPedFlags.bIsInTheAir
-        && !playa->m_nPedFlags.bFiringWeapon
-        && !playa->m_nPedFlags.bIsAimingGun
+        && !playa->bIsInTheAir
+        && !playa->bFiringWeapon
+        && !playa->bIsAimingGun
         && !playa->m_pPlayerData->m_bInVehicleDontAllowWeaponChange
         && !playa->m_pPlayerData->m_bHaveTargetSelected
         && !CDarkel::FrenzyOnGoing()
@@ -300,7 +300,7 @@ bool CWeaponSelector::IsAbleToSwitchWeapon() {
         && !CMenuPanels::bActive
         && !CHudNew::m_bShowWastedBusted
         && !CHudNew::m_bShowSuccessFailed
-        && !playa->m_nPedFlags.bUsingMobilePhone
+        && !playa->bUsingMobilePhone
         && !CPadNew::GetPad(0)->bDisablePlayerCycleWeapon
         && playa->IsPedInControl()
         && mode != MODE_AIMWEAPON
@@ -576,7 +576,7 @@ void CWeaponSelector::PopulateSlot(int slot) {
         CWeaponWheel* w = WeaponWheel[slot][j];
 
         if (w) {
-            if (playa->DoWeHaveWeaponAvailable((eWeaponType)w->id) && (playa->m_aWeapons[playa->GetWeaponSlot((eWeaponType)w->id)].HasWeaponAmmoToBeUsed() || playa->m_aWeapons[playa->GetWeaponSlot((eWeaponType)w->id)].m_eWeaponType == WEAPON_UNARMED)) {
+            if (playa->DoWeHaveWeaponAvailable((eWeaponType)w->id) && (playa->m_aWeapons[playa->GetWeaponSlot((eWeaponType)w->id)].HasWeaponAmmoToBeUsed() || playa->m_aWeapons[playa->GetWeaponSlot((eWeaponType)w->id)].m_eWeaponType == WEAPONTYPE_UNARMED)) {
                 nArrayOfAvailableWeapons[slot][j] = j;
                 nNumWeaponsAvailableInSlot[slot]++;
 
@@ -886,7 +886,7 @@ void CWeaponSelector::DrawWheel() {
                     strcpy(str_clip, "");
                 }
                 else {
-                    if (weaponType == WEAPON_FTHROWER) {
+                    if (weaponType == WEAPONTYPE_FTHROWER) {
                         unsigned int total = 9999;
                         if ((totalAmmo - ammoInClip) / 10 <= 9999)
                             total = (totalAmmo - ammoInClip) / 10;
@@ -906,10 +906,10 @@ void CWeaponSelector::DrawWheel() {
                     }
                 }
 
-                if (weaponType == WEAPON_UNARMED
-                    || weaponType == WEAPON_DETONATOR
-                    || weaponType >= WEAPON_DILDO1 && weaponType < WEAPON_GRENADE
-                    || weaponType == WEAPON_PARACHUTE
+                if (weaponType == WEAPONTYPE_UNARMED
+                    || weaponType == WEAPONTYPE_DETONATOR
+                    || weaponType >= WEAPONTYPE_DILDO1 && weaponType < WEAPONTYPE_GRENADE
+                    || weaponType == WEAPONTYPE_PARACHUTE
                     || CWeaponInfo::GetWeaponInfo((eWeaponType)weaponType, 1)->m_nWeaponFire == 5
                     || CWeaponInfo::GetWeaponInfo((eWeaponType)weaponType, 1)->m_nSlot <= 1) {
                 }
@@ -937,7 +937,7 @@ void CWeaponSelector::DrawWheel() {
         }
 
         // *Extra* Parachute
-        bool hasPara = playa->DoWeHaveWeaponAvailable(WEAPON_PARACHUTE);
+        bool hasPara = playa->DoWeHaveWeaponAvailable(WEAPONTYPE_PARACHUTE);
         if (hasPara) {
             WheelSprite[WHEEL_EXTRA]->Draw(SCREEN_COORD_CENTER_X + SCREEN_COORD(x + 202.0f), SCREEN_COORD_CENTER_Y + SCREEN_COORD(y + 202.0f), SCREEN_COORD(100.0f), SCREEN_COORD(100.0f), CRGBA(0, 0, 0, 50));
             ExtraSprite[WEXTRA_PARA]->Draw(SCREEN_COORD_CENTER_X + SCREEN_COORD(x + 198.0f), SCREEN_COORD_CENTER_Y + SCREEN_COORD(y + 198.0f), SCREEN_COORD(106.0f), SCREEN_COORD(106.0f), CRGBA(255, 255, 255, 255));
@@ -1169,3 +1169,4 @@ CWeaponStat::CWeaponStat() {
 CWeaponCrosshair::CWeaponCrosshair() {
     strcpy(name, "");
 }
+

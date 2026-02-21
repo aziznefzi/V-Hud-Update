@@ -290,7 +290,7 @@ void CCellPhone::ProcessPhoneApp() {
         if (VHud::bSAMP)
             return;
 
-        if (playa->m_nPedFlags.bInVehicle) {
+        if (playa->bInVehicle) {
             CHud::SetHelpMessage(TextNew.GetText("QSAV_ERR").text, true, false, true);
         }
         else {
@@ -546,3 +546,4 @@ void CCellPhone::Draw() {
 }
 
 #endif
+

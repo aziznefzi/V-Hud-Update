@@ -279,7 +279,7 @@ void CFontNew::Clear() {
 }
 
 long CFontNew::AddFont(CFontTT t, LPD3DXFONT* font) {
-    return D3DXCreateFontA(GetD3DDevice(), t.height, t.width, FW_NORMAL, 0, FALSE, t.charSet, OUT_DEFAULT_PRECIS, t.quality, DEFAULT_PITCH | FF_DONTCARE, t.fontName, font);
+    return D3DXCreateFontA((LPDIRECT3DDEVICE9)GetD3DDevice(), t.height, t.width, FW_NORMAL, 0, FALSE, t.charSet, OUT_DEFAULT_PRECIS, t.quality, DEFAULT_PITCH | FF_DONTCARE, t.fontName, font);
 }
 
 void CFontNew::Shutdown() {

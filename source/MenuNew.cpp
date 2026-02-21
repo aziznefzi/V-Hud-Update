@@ -1,4 +1,4 @@
-﻿#include "VHud.h"
+#include "VHud.h"
 #include "CTimer.h"
 #include "CMenuManager.h"
 #include "CWorld.h"
@@ -222,7 +222,7 @@ void CMenuNew::Init() {
 
     Clear();
 
-    for (int i = 0; i < NUM_MENU_SPRITES; i++) {
+    for (int i = 0; i < NUM_VMENU_SPRITES; i++) {
         MenuSprites[i] = new CSprite2d();
         MenuSprites[i]->m_pTexture = CTextureMgr::LoadPNGTextureCB(PLUGIN_PATH("VHud\\menus"), MenuSpritesFileNames[i]);
     }
@@ -264,7 +264,7 @@ void CMenuNew::Shutdown() {
     if (!bInitialised)
         return;
 
-    for (int i = 0; i < NUM_MENU_SPRITES; i++) {
+    for (int i = 0; i < NUM_VMENU_SPRITES; i++) {
         if (MenuSprites[i]) {
             MenuSprites[i]->Delete();
             delete MenuSprites[i];
@@ -713,9 +713,9 @@ void CMenuNew::AddNewBarItem(char* name, int screen) {
     }
 }
 
-CMenuScreen* CMenuNew::AddNewScreen(char* name) {
+CVMenuScreen* CMenuNew::AddNewScreen(char* name) {
     for (int i = 0; i < MAX_MENU_SCREENS; i++) {
-        CMenuScreen* s = &MenuScreen[i];
+        CVMenuScreen* s = &MenuScreen[i];
 
         if (s->screenName[0] != '\0')
             continue;
@@ -725,9 +725,9 @@ CMenuScreen* CMenuNew::AddNewScreen(char* name) {
     }
 }
 
-CMenuScreen* CMenuNew::GetMenuScreen(char* name) {
+CVMenuScreen* CMenuNew::GetMenuScreen(char* name) {
     for (int i = 0; i < MAX_MENU_SCREENS; i++) {
-        CMenuScreen* s = &MenuScreen[i];
+        CVMenuScreen* s = &MenuScreen[i];
 
         if (s->screenName[0] != '\0' &&
             !faststrcmp(s->screenName, name))
@@ -735,7 +735,7 @@ CMenuScreen* CMenuNew::GetMenuScreen(char* name) {
     }
 }
 
-CMenuTab* CMenuNew::GetMenuTab(CMenuScreen* s, char* name) {
+CMenuTab* CMenuNew::GetMenuTab(CVMenuScreen* s, char* name) {
     for (int i = 0; i < MAX_MENU_SCREENS; i++) {
         CMenuTab* t = &s->Tab[i];
 
@@ -760,7 +760,7 @@ CMenuEntry* CMenuNew::GetMenuEntry(CMenuTab* t, int i) {
     return e;
 }
 
-CMenuTab* CMenuNew::AddNewTab(CMenuScreen* s, int type, char* tabName, char* actionName, bool full) {
+CMenuTab* CMenuNew::AddNewTab(CVMenuScreen* s, int type, char* tabName, char* actionName, bool full) {
     for (int j = 0; j < MAX_MENU_TABS; j++) {
         CMenuTab* t = &s->Tab[j];
 
@@ -1015,7 +1015,7 @@ void CMenuNew::DoMapZoomInOut(bool out) {
 void CMenuNew::RemoveUnusedControllerSettings() {
     static bool checkGInput = false;
     if (!checkGInput) {
-        CMenuScreen* s = GetMenuScreen("FE_SET");
+        CVMenuScreen* s = GetMenuScreen("FE_SET");
         CMenuTab* t = GetMenuTab(s, "FE_PAD");
 
         if (GINPUT) {
@@ -1311,7 +1311,7 @@ void CMenuNew::PopulateOriginalMenuStrings(int prev, int i, int curr, int s, int
 }
 
 void CMenuNew::BuildMenuEntriesFromOriginals(int start, int end, int type) {
-    CMenuScreen* s = &MenuScreen[nCurrentScreen];
+    CVMenuScreen* s = &MenuScreen[nCurrentScreen];
     CMenuTab* t = &s->Tab[nCurrentTabItem];
 
     for (int i = start; i < end; i++) {
@@ -1846,9 +1846,9 @@ void CMenuNew::ProcessTabStuff() {
 void CMenuNew::DoSettingsBeforeStartingAGame(bool load, int slot) {
     if (load) {
         if (CGenericGameStorage::CheckSlotDataValid(slot == -1 ? nCurrentEntryItem : slot, false)) {
-            FrontEndMenuManager.m_bDontDrawFrontEnd = true;
+            FrontEndMenuManager.m_bShutDownFrontEndRequested = true;
             CGame::bMissionPackGame = false;
-            FrontEndMenuManager.m_bLoadingData = true;
+            FrontEndMenuManager.m_bWantToLoad = true;
             FrontEndMenuManager.field_1B3C = false;
         }
         else {
@@ -5534,3 +5534,4 @@ void CMenuSettings::Save() {
 
     CPadNew::SaveSettings();
 }
+

@@ -1249,7 +1249,7 @@ void CRadarNew::DrawRadarRectangle() {
         bool nitroBar = false;
         float progress = 0.0f;
 
-        if (playa.m_pPed->m_nPedFlags.bInVehicle &&
+        if (playa.m_pPed->bInVehicle &&
             playa.m_pPed->m_pVehicle &&
             playa.m_pPed->m_pVehicle->m_nVehicleClass == VEHICLE_AUTOMOBILE &&
             playa.m_pPed->m_pVehicle->m_pDriver == playa.m_pPed &&
@@ -1994,9 +1994,11 @@ void CRadarNew::StreamRadarSection(int x, int y) {
 }
 
 bool CRadarNew::IsPlayerInVehicle() {
-    return FindPlayerPed(-1) && FindPlayerPed(-1)->m_nPedFlags.bInVehicle && FindPlayerPed(-1)->m_pVehicle; 
+    return FindPlayerPed(-1) && FindPlayerPed(-1)->bInVehicle && FindPlayerPed(-1)->m_pVehicle; 
 }
 
 bool CRadarNew::Is3dRadar() {
     return m_b3dRadar;
 }
+
+

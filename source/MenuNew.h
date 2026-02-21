@@ -27,7 +27,7 @@ enum eMouseType : char {
     MOUSE_HAND,
 };
 
-enum eMenuSprites {
+enum eVMenuSprites {
     MENU_MOUSE_ARROW,
     MENU_MOUSE_FUCKU,
     MENU_MOUSE_GRAB,
@@ -47,7 +47,7 @@ enum eMenuSprites {
     MENU_MAP_CROSSHAIR_LINE_RIGHT,
     MENU_MAP_CROSSHAIR_LINE_UP,
     MENU_SELECTOR,
-    NUM_MENU_SPRITES,
+    NUM_VMENU_SPRITES,
 };
 
 enum eMiscSprites {
@@ -280,7 +280,7 @@ public:
     }
 };
 
-class CMenuScreen {
+class CVMenuScreen {
 public:
     char screenName[16];
     CMenuTab Tab[MAX_MENU_TABS];
@@ -359,14 +359,14 @@ public:
 
 class CMenuNew {
 public:
-    CSprite2d* MenuSprites[NUM_MENU_SPRITES];
+    CSprite2d* MenuSprites[NUM_VMENU_SPRITES];
     CSprite2d* MiscSprites[NUM_MISC_SPRITES];
     CSprite2d* FrontendSprites[NUM_FRONTEND_SPRITES];
 
     CMenuSettings TempSettings;
     CMenuSettings Settings;
     CMenuBar MenuBar[MAX_MENU_BAR_ITEMS];
-    CMenuScreen MenuScreen[MAX_MENU_SCREENS];
+    CVMenuScreen MenuScreen[MAX_MENU_SCREENS];
 
     int NumVideoModes;
     char** VideoModeList;
@@ -509,12 +509,12 @@ public:
     void SetDefaultPageBehaviour();
 
     void AddNewBarItem(char* name, int screen);
-    CMenuScreen* AddNewScreen(char* name);
-    CMenuTab* AddNewTab(CMenuScreen* s, int type, char* tabName, char* actionName, bool full);
+    CVMenuScreen* AddNewScreen(char* name);
+    CMenuTab* AddNewTab(CVMenuScreen* s, int type, char* tabName, char* actionName, bool full);
     CMenuEntry* AddNewEntry(CMenuTab* t, int type, char* entryName, int x, int y);
 
-    CMenuScreen* GetMenuScreen(char* name);
-    CMenuTab* GetMenuTab(CMenuScreen* s, char* name);
+    CVMenuScreen* GetMenuScreen(char* name);
+    CMenuTab* GetMenuTab(CVMenuScreen* s, char* name);
     CMenuEntry* GetMenuEntry(CMenuTab* t, char* name);
     CMenuEntry* GetMenuEntry(CMenuTab* t, int i);
 
