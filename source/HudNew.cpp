@@ -502,14 +502,14 @@ bool CHudNew::IsFirstPersonAiming() {
 void CHudNew::DrawCrosshairs() {
     float x = SCREEN_WIDTH * CCamera::m_f3rdPersonCHairMultX;
     float y = SCREEN_HEIGHT * CCamera::m_f3rdPersonCHairMultY;
-    int modelId = CWeaponInfo::GetWeaponInfo(CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_aWeapons[CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_nActiveWeaponSlot].m_nType, 1)->m_nModelId1;
+    int modelId = CWeaponInfo::GetWeaponInfo(CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_aWeapons[CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_nActiveWeaponSlot].m_eWeaponType, 1)->m_nModelId1;
     float radius = CWorld::Players[CWorld::PlayerInFocus].m_pPed->GetWeaponRadiusOnScreen() * 2.0f;
     bool reloading = CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_aWeapons[CWorld::Players[CWorld::PlayerInFocus].m_pPed->m_nActiveWeaponSlot].m_nState == WEAPONSTATE_RELOADING;
 
     CRect rect;
     CRGBA col;
     CPlayerPed* playa = FindPlayerPed(-1);
-    char* crosshairName = CWeaponSelector::nCrosshairs[playa->m_aWeapons[playa->m_nActiveWeaponSlot].m_nType].name;
+    char* crosshairName = CWeaponSelector::nCrosshairs[playa->m_aWeapons[playa->m_nActiveWeaponSlot].m_eWeaponType].name;
     bool forceForFPS = false;
 
     unsigned int savedShade;
@@ -815,10 +815,10 @@ void CHudNew::DrawMoneyCounter() {
 void CHudNew::DrawAmmo() {
     CPed* playa = FindPlayerPed(0);
     int slot = playa->m_nActiveWeaponSlot;
-    int weaponType = playa->m_aWeapons[slot].m_nType;
+    int weaponType = playa->m_aWeapons[slot].m_eWeaponType;
     int totalAmmo = playa->m_aWeapons[slot].m_nTotalAmmo;
     int ammoInClip = playa->m_aWeapons[slot].m_nAmmoInClip;
-    int maxAmmoInClip = CWeaponInfo::GetWeaponInfo(playa->m_aWeapons[slot].m_nType, playa->GetWeaponSkill())->m_nAmmoClip;
+    int maxAmmoInClip = CWeaponInfo::GetWeaponInfo(playa->m_aWeapons[slot].m_eWeaponType, playa->GetWeaponSkill())->m_nAmmoClip;
     int ammo, clip;
     char str_ammo[16], str_clip[16];
 
@@ -1140,7 +1140,7 @@ void CHudNew::DrawStats() {
         CFontNew::SetOutline(0.0f);
         CFontNew::SetScale(SCREEN_MULTIPLIER(0.52f), SCREEN_MULTIPLIER(1.24f));
 
-        int wepType = playa->m_aWeapons[playa->m_nActiveWeaponSlot].m_nType;
+        int wepType = playa->m_aWeapons[playa->m_nActiveWeaponSlot].m_eWeaponType;
         if (wepType == WEAPON_TEC9) {
             wepType = WEAPON_MICRO_UZI;
         }

@@ -478,24 +478,24 @@ void CRadarNew::DrawBlips() {
         if (!trace)
             continue;
 
-        if (!trace[i].m_bTrackingBlip)
+        if (!trace[i].m_bInUse)
             continue;
 
-        if (!MenuNew.TempSettings.showBlips && LOBYTE(trace[i].m_nBlipSprite) != RADAR_SPRITE_WAYPOINT)
+        if (!MenuNew.TempSettings.showBlips && LOBYTE(trace[i].m_nRadarSprite) != RADAR_SPRITE_WAYPOINT)
             continue;
 
         switch (trace[i].m_nBlipType) {
         case BLIP_COORD:
         case BLIP_CONTACTPOINT:
-            if (LOBYTE(trace[i].m_nBlipSprite) == RADAR_SPRITE_WAYPOINT || DisplayThisBlip(HIBYTE(trace[i].m_nBlipSprite), i) || LOBYTE(trace[i].m_nBlipSprite) != RADAR_SPRITE_NONE)
-                DrawCoordBlip(i, trace[i].m_nBlipSprite != RADAR_SPRITE_NONE);
+            if (LOBYTE(trace[i].m_nRadarSprite) == RADAR_SPRITE_WAYPOINT || DisplayThisBlip(HIBYTE(trace[i].m_nRadarSprite), i) || LOBYTE(trace[i].m_nRadarSprite) != RADAR_SPRITE_NONE)
+                DrawCoordBlip(i, trace[i].m_nRadarSprite != RADAR_SPRITE_NONE);
             break;
         case BLIP_CAR:
         case BLIP_CHAR:
         case BLIP_OBJECT:
         case BLIP_PICKUP:
-            if (DisplayThisBlip(HIBYTE(trace[i].m_nBlipSprite), i) || LOBYTE(trace[i].m_nBlipSprite) != RADAR_SPRITE_NONE)
-                DrawEntityBlip(i, trace[i].m_nBlipSprite != RADAR_SPRITE_NONE);
+            if (DisplayThisBlip(HIBYTE(trace[i].m_nRadarSprite), i) || LOBYTE(trace[i].m_nRadarSprite) != RADAR_SPRITE_NONE)
+                DrawEntityBlip(i, trace[i].m_nRadarSprite != RADAR_SPRITE_NONE);
             break;
         case BLIP_SPOTLIGHT:
         case BLIP_AIRSTRIP:
@@ -676,7 +676,7 @@ void CRadarNew::DrawPickupBlips() {
 void CRadarNew::SetBlipSprite(int i, unsigned short icon) {
     int index = CRadar::GetActualBlipArrayIndex(i);
     if (index != -1) {
-        GetRadarTrace()[index].m_nBlipSprite = icon;
+        GetRadarTrace()[index].m_nRadarSprite = icon;
     }
 }
 
@@ -1943,9 +1943,9 @@ void CRadarNew::AddBlipToLegendList(bool trace, int id) {
                 break;
             }
 
-            c = t.m_dwColour;
+            c = t.m_nColour;
             friendly = t.m_bFriendly;
-            pos = t.m_vPosition;
+            pos = t.m_vecPos;
             break;
         }
 

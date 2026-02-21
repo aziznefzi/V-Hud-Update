@@ -209,8 +209,8 @@ void CGPS::DrawPathLine() {
     if (playa) {
         if (FrontEndMenuManager.m_nTargetBlipIndex
             && CRadarNew::GetRadarTrace()[LOWORD(FrontEndMenuManager.m_nTargetBlipIndex)].m_nCounter == HIWORD(FrontEndMenuManager.m_nTargetBlipIndex)
-            && CRadarNew::GetRadarTrace()[LOWORD(FrontEndMenuManager.m_nTargetBlipIndex)].m_nBlipDisplayFlag
-            && DistanceBetweenPoints(CVector2D(FindPlayerCentreOfWorld_NoInteriorShift(0)), CVector2D(CRadarNew::GetRadarTrace()[LOWORD(FrontEndMenuManager.m_nTargetBlipIndex)].m_vPosition)) < MAX_TARGET_DISTANCE) {
+            && CRadarNew::GetRadarTrace()[LOWORD(FrontEndMenuManager.m_nTargetBlipIndex)].m_nBlipDisplay
+            && DistanceBetweenPoints(CVector2D(FindPlayerCentreOfWorld_NoInteriorShift(0)), CVector2D(CRadarNew::GetRadarTrace()[LOWORD(FrontEndMenuManager.m_nTargetBlipIndex)].m_vecPos)) < MAX_TARGET_DISTANCE) {
             CRadar::ClearBlip(FrontEndMenuManager.m_nTargetBlipIndex);
             FrontEndMenuManager.m_nTargetBlipIndex = 0;
         }
@@ -221,8 +221,8 @@ void CGPS::DrawPathLine() {
             && playa->m_pVehicle->m_nVehicleSubClass != VEHICLE_BMX) || MenuNew.bDrawMenuMap) {
             if (FrontEndMenuManager.m_nTargetBlipIndex
                 && CRadarNew::GetRadarTrace()[LOWORD(FrontEndMenuManager.m_nTargetBlipIndex)].m_nCounter == HIWORD(FrontEndMenuManager.m_nTargetBlipIndex)
-                && CRadarNew::GetRadarTrace()[LOWORD(FrontEndMenuManager.m_nTargetBlipIndex)].m_nBlipDisplayFlag) {
-                CVector destPosn = CRadarNew::GetRadarTrace()[LOWORD(FrontEndMenuManager.m_nTargetBlipIndex)].m_vPosition;
+                && CRadarNew::GetRadarTrace()[LOWORD(FrontEndMenuManager.m_nTargetBlipIndex)].m_nBlipDisplay) {
+                CVector destPosn = CRadarNew::GetRadarTrace()[LOWORD(FrontEndMenuManager.m_nTargetBlipIndex)].m_vecPos;
                 destPosn.z = CWorld::FindGroundZForCoord(destPosn.x, destPosn.y);
 
                 Dest.pathColor = CRadarNew::GetBlipColor(RADAR_SPRITE_WAYPOINT).ToInt();
