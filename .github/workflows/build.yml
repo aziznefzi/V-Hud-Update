@@ -3,7 +3,7 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
-    name: Build V-Hud with Visual Studio 2019
+    name: Build V-Hud with Visual Studio 2022
     runs-on: windows-latest
 
     steps:
@@ -29,7 +29,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: DK22Pac/plugin-sdk
-          ref: 62a1080902627b3edec0124acf02127ba8c0dcdb
           path: plugin-sdk
           submodules: recursive
 
@@ -37,11 +36,11 @@ jobs:
         working-directory: plugin-sdk
         shell: cmd
         run: |
-          call "tools\generate\Visual Studio 2019.bat"
-          msbuild plugin.sln /p:Configuration=Release /p:Platform=Win32 /target:plugin_sa /m
+          call "tools\generate\Visual Studio.bat"
+          msbuild plugin.sln /p:Configuration=Release /p:Platform="Mixed Platforms" /target:plugin_sa /m
 
       - name: Generate V-Hud Project Files
-        run: .\premake5.exe vs2019
+        run: .\premake5.exe vs2022
 
       - name: Build V-Hud Project (ReleaseSA | x86)
         run: msbuild project_files\v-hud.sln /p:Configuration=ReleaseSA /p:Platform=Win32 /m
