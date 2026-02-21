@@ -1,0 +1,51 @@
+name: Build V-Hud ASI (32-bit)
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  build:
+    name: Build V-Hud with Visual Studio 2019
+    runs-on: windows-2019
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Download & Install DirectX 9 SDK
+        run: |
+          choco install directx-sdk -y
+        # Chocolatey installs DXSDK to C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\ by default.
+
+      - name: Set Environment Variables
+        run: |
+          echo "DXSDK_DIR=C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\" >> $env:GITHUB_ENV
+          echo "PLUGIN_SDK_DIR=$env:GITHUB_WORKSPACE\plugin-sdk" >> $env:GITHUB_ENV
+
+      - name: Checkout Plugin-SDK
+        uses: actions/checkout@v3
+        with:
+          repository: DK22Pac/plugin-sdk
+          path: plugin-sdk
+          submodules: recursive
+
+      - name: Build Plugin-SDK (GTA SA)
+        working-directory: plugin-sdk
+        run: |
+          .\premake5.exe vs2019
+          msbuild plugin_sdk.sln /p:Configuration=Release /p:Platform=x86 /m
+
+      - name: Generate V-Hud Project Files
+        run: .\premake5.exe vs2019
+
+      - name: Build V-Hud Project (ReleaseSA | x86)
+        run: msbuild project_files\v-hud.sln /p:Configuration=ReleaseSA /p:Platform=Win32 /m
+
+      - name: Upload V-Hud.asi Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: V-Hud_ASI_32bit
+          path: output\asi\VHud.asi
