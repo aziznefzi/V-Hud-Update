@@ -38,7 +38,7 @@ jobs:
         shell: cmd
         run: |
           call "tools\generate\Visual Studio 2019.bat"
-          msbuild plugin.sln /p:Configuration=Release /p:Platform="Mixed Platforms" /target:plugin_sa /m
+          msbuild plugin.sln /p:Configuration=Release /p:Platform=Win32 /target:plugin_sa /m
 
       - name: Generate V-Hud Project Files
         run: .\premake5.exe vs2019
