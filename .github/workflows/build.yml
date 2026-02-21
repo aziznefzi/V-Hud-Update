@@ -34,9 +34,10 @@ jobs:
 
       - name: Build Plugin-SDK (GTA SA)
         working-directory: plugin-sdk
+        shell: cmd
         run: |
-          ..\premake5.exe vs2019
-          msbuild plugin_sdk.sln /p:Configuration=Release /p:Platform=x86 /m
+          call "tools\generate\Visual Studio.bat"
+          msbuild plugin.sln /p:Configuration=Release /p:Platform="Mixed Platforms" /target:plugin_sa /m
 
       - name: Generate V-Hud Project Files
         run: .\premake5.exe vs2019
