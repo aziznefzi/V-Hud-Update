@@ -4,7 +4,7 @@ on: [push, pull_request, workflow_dispatch]
 jobs:
   build:
     name: Build V-Hud with Visual Studio 2019
-    runs-on: windows-2019
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
