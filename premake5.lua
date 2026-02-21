@@ -40,6 +40,7 @@ project "v-hud"
 		includedirs {
 			"$(PLUGIN_SDK_DIR)/plugin_III/",
 			"$(PLUGIN_SDK_DIR)/plugin_III/game_III/",
+			"$(PLUGIN_SDK_DIR)/plugin_III/game_III/rw/",
 			"$(RWD3D9_DIR)/source"
 		}
 		targetname "VHudIII"
@@ -54,6 +55,7 @@ project "v-hud"
 		includedirs {
 			"$(PLUGIN_SDK_DIR)/plugin_vc/",
 			"$(PLUGIN_SDK_DIR)/plugin_vc/game_vc/",
+			"$(PLUGIN_SDK_DIR)/plugin_vc/game_vc/rw/",
 			"$(RWD3D9_DIR)/source"
 		}
 		targetname "VHudVC"
@@ -67,7 +69,8 @@ project "v-hud"
 		defines { "GTASA", "PLUGIN_SGV_10US" }
 		includedirs {
 			"$(PLUGIN_SDK_DIR)/plugin_sa/",
-			"$(PLUGIN_SDK_DIR)/plugin_sa/game_sa/"
+			"$(PLUGIN_SDK_DIR)/plugin_sa/game_sa/",
+			"$(PLUGIN_SDK_DIR)/plugin_sa/game_sa/rw/"
 		}
 		targetname "VHud"
 		debugdir "$(GTA_SA_DIR)"
